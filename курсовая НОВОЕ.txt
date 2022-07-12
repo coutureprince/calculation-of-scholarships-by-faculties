@@ -1,0 +1,164 @@
+using System;
+using System.IO;
+
+namespace _2._0kyrs
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+
+            double x = 0;
+            Console.WriteLine("добавить студента");
+            Console.WriteLine("поиск по студ билету");
+            Console.WriteLine("Сортировка");
+            int z = Convert.ToInt32(Console.ReadLine());
+            if (z == 1)
+            {
+                Console.WriteLine("введите ваш номер студенческого билета ");
+                string text = Console.ReadLine();
+                Console.WriteLine("введите ФИО");
+                String fio = Console.ReadLine();
+                Console.WriteLine("Введите пол(М или Ж)");
+                string pol = Console.ReadLine();
+                Console.WriteLine("Введите факультет (ФЭИФ,БТ,ФОЗОЖ,ИФ)");
+                string fak = Console.ReadLine();
+                Console.WriteLine("Введите группу");
+                string groppa = Console.ReadLine();
+                Console.WriteLine("Введите ваш средний балл");
+                x = Convert.ToDouble(Console.ReadLine());
+                double k = 0;
+                if (x <= 5)
+                {
+                    Console.WriteLine("Нет стипендии");
+                    k = 0;
+                }
+                else if (x >= 6 && x <= 6.9)
+                {
+                    Console.WriteLine("ср.балл успеваемости  " + x + " Размер стипендии - 85.70");
+                    k = 85.70;
+                }
+                else if (x >= 7 && x <= 7.9)
+                {
+                    Console.WriteLine("ср.балл успеваемости" + x + "Размер стипендии - 94.27");
+                    k = 94.27;
+                }
+                else if (x >= 8 && x <= 8.9)
+                {
+                    Console.WriteLine("ср.балл успеваемости" + x + "Размер стипендии - 111.41");
+                    k = 111.41;
+                }
+                else if (x >= 9 && x <= 10)
+                {
+                    Console.WriteLine("ср.балл успеваемости " + x + " Размер стипендии - 128.55");
+                    k = 128.55;
+                }
+                using (StreamWriter a = new StreamWriter(@"database.txt", true))
+                {
+                    a.WriteLine(text + ';' + fio + ';' + x + ';' + k + ';' + pol + ';' + fak + ';' + groppa);
+                }
+
+            }
+
+            if (z == 2)
+            {
+                string[] path = File.ReadAllLines(@"database.txt");
+                string[,] array1 = new string[path.Length, path[0].Split(";").Length];
+                Console.Write("введите студенческий билет: ");
+                string name1 = Console.ReadLine();
+                //int m = Convert.ToInt32(name);
+
+                for (int i = 0; i < path.GetLength(0); i++)
+                {
+                    string[] temp = path[i].Split(';');
+                    for (int j = 0; j < temp.GetLength(0); j++)
+                    {
+                        array1[i, j] = temp[j];
+
+                    }
+                }
+                for (int i = 0; i < array1.GetLength(0); i++)
+                {
+                    for (int j = 0; j < array1.GetLength(1); j++)
+                    {
+                        if (array1[i, j] == name1)
+                        {
+
+                            Console.WriteLine(name1 + ": " + array1[i, j + 1] + " " + array1[i, j + 2] + " " + array1[i, j + 3] + " " + array1[i, j + 4] + " " + array1[i, j + 5] + " " + array1[i, j + 6]);
+                        }
+                    }
+                }
+            }
+            if (z == 3)
+            {
+
+                string[] buf = File.ReadAllLines(@"database.txt");
+                string[,] array = new string[buf.Length, buf[0].Split(';').Length];
+                for (int i = 0; i < buf.GetLength(0); i++)
+                {
+                    string[] temp = buf[i].Split(';');
+                    for (int j = 0; j < temp.GetLength(0); j++)
+                    {
+                        array[i, j] = temp[j];
+                    }
+                }
+
+                Console.WriteLine("Выберите условие поиска: 1) Сортировка по полу. 2) Сортировка по баллу. 3) Поиск по номеру билета. 4)Сортировка по группе");
+                int p = int.Parse(Console.ReadLine());
+                int pol = 0;
+                string name = " ";
+                if (p == 1)
+                {
+                    Console.WriteLine("Выберите цифру пола: 1) Женский. 2) Мужской.");
+                    pol = int.Parse(Console.ReadLine());
+                }
+                if (p == 2)
+                {
+                    Console.WriteLine("Введите средний бал: ");
+                    name = Console.ReadLine();
+                }
+                if (p == 3)
+                {
+                    Console.WriteLine("Введите номер студ.билета: ");
+                    name = Console.ReadLine();
+                }
+                if (p == 4)
+                {
+                    Console.WriteLine("введите номер группы");
+                    name = Console.ReadLine();
+                }
+                for (int i = 0; i < array.GetLength(0); i++)
+                {
+                    for (int j = 0; j < array.GetLength(1); j++)
+                    {
+                        if (pol != 0)
+                        {
+                            if (pol == 1 && array[i, 4] == "Ж")
+                            {
+                                Console.WriteLine(array[i, 1] + ", Степендия: " + array[i, 3]);
+                                break;
+                            }
+                            if (pol == 2 && array[i, 4] == "М")
+                            {
+                                Console.WriteLine(array[i, 1] + ", Степендия: " + array[i, 3]);
+                                break;
+                            }
+                        }
+                        if (pol == 0)
+                        {
+                            if (array[i, j] == name)
+                            {
+                                Console.WriteLine((name + ": " + array[i, 1] + " " + array[i,2] + " " + array[i,3] + " " + array[i,4] + " " + array[i, 5] + " " + array[i, 6]));
+                            }
+                        }
+
+                    }
+                }
+
+
+            }
+        }
+    }
+}
+
+
